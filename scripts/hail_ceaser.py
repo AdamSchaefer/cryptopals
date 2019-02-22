@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import codecs
-import pprint
+from pprint import pprint
 
 def xor(string1, string2):
     # Convert strings to lists of bytecodes 
@@ -17,25 +17,26 @@ def xor(string1, string2):
     result = codecs.encode(bytes(b_result), 'hex')
     return result
 
-# Prepare the hex encoded string to be XOR'd
-prepared_string = bytes(codecs.decode(input('Hex encoded string => '), 'hex'))
 
-# Create list to store results
-results = []
+def single_ch_xor(ceaser_ciphered, cutoff=5):
+    # Create list to store results
+    results = []
 
-for i in range(0, 256):
-    # Create my ceaser cipher as a list of bytes equal to the length of my encoded hex string
-    ceaser_cipher = bytes([i] * len(prepared_string))
-    xor_result = xor(prepared_string, ceaser_cipher)
-    decoded_result = codecs.decode(xor_result, 'hex')
+    for i in range(0, 256):
+        # Create my ceaser cipher as a list of bytes equal to the length of my encoded hex string
+        ceaser_cipher = bytes([i] * len(ceaser_ciphered))
+        xor_result = xor(ceaser_ciphered, ceaser_cipher)
+        decoded_result = codecs.decode(xor_result, 'hex')
 
-    count = sum(decoded_result.count(ch) for ch in (b'etaoinshrdlu'))
+        count = sum(decoded_result.count(ch) for ch in (b'etaoinshrdlu'))
 
-    results.append((count, decoded_result))
+        results.append((count, decoded_result))
 
-results.sort()
+    results.sort()
 
-pprint.pprint(results[-10:])
+    return results[-cutoff:]
 
-
-
+if __name__ == "__main__":
+    # Prepare the hex encoded string to be XOR'd
+    prepared_string = bytes(codecs.decode(input('Hex encoded string => '), 'hex'))
+    pprint(single_ch_xor(prepared_string))

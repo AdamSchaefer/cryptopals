@@ -18,7 +18,7 @@ def xor(string1, string2):
     return result
 
 
-def single_ch_xor(ceaser_ciphered, cutoff=5):
+def single_ch_xor(ceaser_ciphered, cutoff=5, include_key=False):
     # Create list to store results
     results = []
 
@@ -30,7 +30,10 @@ def single_ch_xor(ceaser_ciphered, cutoff=5):
 
         count = sum(decoded_result.count(ch) for ch in (b'etaoinshrdlu'))
 
-        results.append((count, decoded_result))
+        if include_key:
+            results.append((count, bytes([i]), decoded_result))
+        else:
+            results.append((count, decoded_result))
 
     results.sort()
 
